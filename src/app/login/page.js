@@ -1,39 +1,39 @@
-'use client'
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
-export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [error, setError] = useState("");
+export default function LoginPage() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+
     try {
-      const response = await fetch("http://localhost:8000/api/signup", {
-        method: "POST",
+      const response = await fetch('http://localhost:8000/api/login', {
+        method: 'POST',
         credentials: 'include',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, fullName })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
-      
+
       if (!response.ok) {
-        throw new Error(data.message || 'Signup failed');
+        throw new Error(data.message || 'Login failed');
       }
 
       router.push('/user');
-      
     } catch (err) {
       setError(err.message || 'Something went wrong');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-black relative overflow-hidden">
@@ -44,10 +44,12 @@ export default function Home() {
       </div>
       <div className="max-w-md w-full space-y-8 p-10 bg-gray-900 bg-opacity-80 rounded-xl shadow-2xl z-10 backdrop-filter backdrop-blur-lg border border-gray-800">
         <div className="text-center">
-          <h2 className="mt-6 text-4xl font-bold text-white">Join the Void</h2>
-          <p className="mt-2 text-sm text-gray-400">Create your account</p>
+          <h2 className="mt-6 text-4xl font-bold text-white">
+            Access the Void
+          </h2>
+          <p className="mt-2 text-sm text-gray-400">Enter your credentials</p>
         </div>
-
+        
         {error && (
           <div className="bg-red-500 bg-opacity-20 border border-red-400 text-white px-4 py-3 rounded-lg">
             {error}
@@ -80,28 +82,12 @@ export default function Home() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="new-password"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-gray-800"
-                placeholder="Password"
-              />
-            </div>
-            <div>
-              <label htmlFor="fullName" className="sr-only">
-                Full Name
-              </label>
-              <input
-                id="fullName"
-                name="fullName"
-                type="text"
-                autoComplete="name"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-300 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm bg-gray-800"
-                placeholder="Full Name"
+                placeholder="Password"
               />
             </div>
           </div>
@@ -116,16 +102,16 @@ export default function Home() {
                   <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                 </svg>
               </span>
-              Sign Up
+              Sign in
             </button>
           </div>
         </form>
 
         <div className="text-center mt-4">
           <p className="text-sm text-gray-400">
-            Already have an account?{' '}
-            <Link href="/login" className="font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-300">
-              Login here
+            Don't have an account?{' '}
+            <Link href="/" className="font-medium text-indigo-400 hover:text-indigo-300 transition-colors duration-300">
+              Join the darkness
             </Link>
           </p>
         </div>
